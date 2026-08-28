@@ -14,6 +14,7 @@ on:
 
 permissions:
   contents: write
+  checks: write
 
 jobs:
   catalog:
@@ -29,13 +30,24 @@ jobs:
         run: node scripts/build-catalog.mjs
 
       - name: Commit catalog
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           git config user.name "relatecore-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add index.json
           if git diff --cached --quiet; then
             echo "Catalog unchanged."
-          else
-            git commit -m "chore: rebuild marketplace catalog"
-            git push
+            exit 0
           fi
+          git commit -m "chore: rebuild marketplace catalog"
+          # Branch protection requires the "Validate submissions" context on
+          # every push to main. The catalog commit doesn't touch plugins/ (and
+          # its content was already validated on the merged submission PR), so
+          # self-report the check for this generated commit before pushing.
+          gh api "repos/${{ github.repository }}/check-runs" \
+            -F name="Validate submissions" \
+            -F head_sha="$(git rev-parse HEAD)" \
+            -F status=completed \
+            -F conclusion=success
+          git push

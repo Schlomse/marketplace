@@ -6,8 +6,9 @@ name: Validate submissions
 
 on:
   pull_request:
-    paths:
-      - 'plugins/**'
+    # No `paths:` filter on purpose: "Validate submissions" is a required
+    # status check on main, so every PR must report it — the script below is
+    # a no-op for PRs that don't change plugins/.
 
 permissions:
   contents: read

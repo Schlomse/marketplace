@@ -1,0 +1,14 @@
+{
+  "id": "hello-marketplace",
+  "name": "Hello Marketplace",
+  "version": "1.0.0",
+  "clerkUserId": "user_3IVovfx8q1UFxPDy6V5AmShDlBi",
+  "author": null,
+  "submittedAt": "2026-08-28T20:51:19.598Z",
+  "changelog": "Initial e2e pipeline test",
+  "tags": [
+    "test",
+    "e2e"
+  ],
+  "status": "pending-review"
+}

@@ -1,0 +1,14 @@
+{
+  "id": "hello-marketplace",
+  "name": "Hello Marketplace",
+  "version": "1.0.0",
+  "description": "E2E test plugin: verifies the full submission pipeline (worker → PR → catalog → install).",
+  "author": "RelateCore Setup",
+  "tabs": [
+    {
+      "id": "main",
+      "label": "Hello",
+      "entry": "index.html"
+    }
+  ]
+}

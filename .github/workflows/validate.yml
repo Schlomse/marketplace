@@ -1,0 +1,45 @@
+name: Validate submissions
+
+# Runs on every PR that touches plugins/ — enforces the same rules as the
+# submission worker so manual review can focus on content. Make this check
+# required via branch protection so nothing invalid can be merged into main.
+
+on:
+  pull_request:
+    paths:
+      - 'plugins/**'
+
+permissions:
+  contents: read
+
+jobs:
+  # The job name is the required status-check context on main — keep it in
+  # sync with the branch protection rule.
+  validate:
+    name: Validate submissions
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Determine changed plugin folders
+        id: changed
+        run: |
+          BASE="${{ github.event.pull_request.base.sha }}"
+          HEAD="${{ github.event.pull_request.head.sha }}"
+          DIRS="$(git diff --name-only "$BASE" "$HEAD" | grep '^plugins/' | cut -d/ -f2 | sort -u || true)"
+          echo "dirs=$DIRS" >> "$GITHUB_OUTPUT"
+          echo "changed plugin folders: ${DIRS:-<none>}"
+
+      - name: Validate submissions
+        run: |
+          if [ -z "${{ steps.changed.outputs.dirs }}" ]; then
+            echo "No plugin folders changed — nothing to validate."
+            exit 0
+          fi
+          node scripts/validate-submission.mjs ${{ steps.changed.outputs.dirs }}

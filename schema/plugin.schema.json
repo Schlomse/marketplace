@@ -1,0 +1,75 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/<org>/marketplace/main/schema/plugin.schema.json",
+  "title": "RelateCore plugin manifest",
+  "description": "Schema for plugin.json inside plugins/<id>/. Enforced by the submission worker and the Validate submissions workflow.",
+  "type": "object",
+  "required": ["id", "name"],
+  "additionalProperties": true,
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9_-]{1,38}$",
+      "description": "Unique plugin id — must match the folder name and is not one of the reserved ids (index, schema, plugins)."
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+(?:[-+][A-Za-z0-9.-]+)?$"
+    },
+    "description": {
+      "type": "string",
+      "maxLength": 300
+    },
+    "author": {
+      "type": "string",
+      "maxLength": 64
+    },
+    "icon": {
+      "type": "string",
+      "description": "Small tab icon (png/jpg/svg/webp/gif/ico), relative to the plugin folder.",
+      "pattern": "^(?!/)(?!.*\\.\\.).+\\.(png|jpe?g|svg|webp|gif|ico)$"
+    },
+    "logo": {
+      "type": "string",
+      "description": "Profile picture shown in the Plugins manager and marketplace (png/jpg/svg/webp/gif/ico).",
+      "pattern": "^(?!/)(?!.*\\.\\.).+\\.(png|jpe?g|svg|webp|gif|ico)$"
+    },
+    "tabs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "label", "entry"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-zA-Z0-9_-]{1,64}$" },
+          "label": { "type": "string", "minLength": 1, "maxLength": 32 },
+          "entry": {
+            "type": "string",
+            "description": "HTML file loaded into the tab, relative to the plugin folder.",
+            "pattern": "^(?!/)(?!.*\\.\\.).+\\.html?$"
+          }
+        }
+      }
+    },
+    "themes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "variables"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-zA-Z0-9_-]{1,64}$" },
+          "name": { "type": "string", "minLength": 1, "maxLength": 64 },
+          "variables": {
+            "type": "object",
+            "description": "CSS custom properties (--rc-*) applied under .theme-<pluginId>-<themeId>.",
+            "additionalProperties": { "type": "string" }
+          }
+        }
+      }
+    }
+  }
+}

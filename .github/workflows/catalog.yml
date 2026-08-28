@@ -1,0 +1,41 @@
+name: Build catalog
+
+# Rebuilds index.json whenever the plugins tree changes on main — i.e. right
+# after a submission PR is merged. The RelateCore app reads index.json through
+# the jsDelivr CDN, so this commit is what makes a plugin "go live".
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'plugins/**'
+      - 'scripts/build-catalog.mjs'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  catalog:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Rebuild index.json
+        run: node scripts/build-catalog.mjs
+
+      - name: Commit catalog
+        run: |
+          git config user.name "relatecore-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.json
+          if git diff --cached --quiet; then
+            echo "Catalog unchanged."
+          else
+            git commit -m "chore: rebuild marketplace catalog"
+            git push
+          fi

@@ -41,13 +41,17 @@ jobs:
             exit 0
           fi
           git commit -m "chore: rebuild marketplace catalog"
+          SHA=$(git rev-parse HEAD)
           # Branch protection requires the "Validate submissions" context on
-          # every push to main. The catalog commit doesn't touch plugins/ (and
-          # its content was already validated on the merged submission PR), so
-          # self-report the check for this generated commit before pushing.
+          # every push to main. The catalog commit doesn't touch plugins/ (its
+          # content was already validated on the merged submission PR), so we
+          # self-report the check for it. The check-run API only accepts SHAs
+          # that exist remotely — stage the commit on an unprotected ref first.
+          git push origin "HEAD:refs/heads/catalog-staging"
           gh api "repos/${{ github.repository }}/check-runs" \
             -F name="Validate submissions" \
-            -F head_sha="$(git rev-parse HEAD)" \
+            -F head_sha="$SHA" \
             -F status=completed \
             -F conclusion=success
-          git push
+          git push origin "HEAD:main"
+          git push origin --delete catalog-staging

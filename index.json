@@ -20,7 +20,7 @@
     "author": "schlomse",
     "description": "Start, stop, and monitor a local Minecraft server, browse its folder structure and view console output.",
     "version": "1.0.0",
-    "icon": "plugins/minecraft/icon.svg",
+    "icon": "plugins/minecraft/page/icon.png",
     "downloads": 0,
     "rating": 0,
     "ratingCount": 0,
@@ -28,6 +28,12 @@
       "tabs",
       "productivity"
     ],
-    "updatedAt": "2026-08-29"
+    "updatedAt": "2026-08-29",
+    "longDescription": "göädefsrkglgöädefsrkglgöädefsrkglgöädefsrkglgöädefsrkglgöädefsrkglgöädefsrkglgöädefsrkglgöädefsrkglgöädefsrkglgöädefsrkglgöädefsrkglgöädefsrkglgöädefsrkglgöädefsrkglgöädefsrkglgöädefsrkglgöädefsrkglgöädefsrkglgöädefsrkglgöädefsrkglgöädefsrkglgöädefsrkglgöädefsrkglgöädefsrkglgöädefsrkglgöädefsrkglgöädefsrkglgöädefsrkglgöädefsrkgl",
+    "accentColor": "#00ff1e",
+    "screenshots": [
+      "plugins/minecraft/page/screenshots/1.png",
+      "plugins/minecraft/page/screenshots/2.png"
+    ]
   }
 ]

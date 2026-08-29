@@ -60,15 +60,41 @@ for (const id of ids) {
     ? Math.round((ratings.reduce((a, b) => a + b, 0) / ratingCount) * 10) / 10
     : 0;
 
-  const icon = manifest.logo ?? manifest.icon;
+  // Listing page design (worker-written meta.json "page" object) overrides
+  // the bare manifest for everything presentation-related.
+  const page = meta.page ?? {};
+  const links = page.links ?? {};
+
+  // Icon: the page icon wins; otherwise the manifest logo/icon. Both are
+  // stored relative to the plugin folder and need the repo path prefix.
+  const prefixed = (p) => (p.startsWith('plugins/') ? p : `plugins/${id}/${p}`);
+  const pageIcon = typeof page.icon === 'string' && page.icon ? prefixed(page.icon) : undefined;
+  const manifestIcon =
+    typeof manifest.logo === 'string' && manifest.logo ? prefixed(manifest.logo)
+    : typeof manifest.icon === 'string' && manifest.icon ? prefixed(manifest.icon)
+    : undefined;
+  const icon = pageIcon ?? manifestIcon;
+
+  // Screenshot paths: current workers store them relative to the plugin
+  // folder; early submissions already carry the full repo path. Accept both.
+  const screenshots = Array.isArray(page.screenshots)
+    ? page.screenshots.map((s) => (typeof s === 'string' && s ? prefixed(s) : undefined))
+        .filter((s) => typeof s === 'string')
+    : undefined;
 
   entries.push({
     slug: typeof manifest.id === 'string' && manifest.id ? manifest.id : id,
-    name: typeof manifest.name === 'string' ? manifest.name : id,
+    name: typeof page.name === 'string' ? page.name
+      : typeof manifest.name === 'string' ? manifest.name : id,
     author: meta.author ?? manifest.author ?? 'unknown',
-    description: typeof manifest.description === 'string' ? manifest.description : '',
+    description:
+      typeof page.shortDescription === 'string' && page.shortDescription
+        ? page.shortDescription
+        : typeof manifest.description === 'string'
+          ? manifest.description
+          : '',
     version: typeof manifest.version === 'string' ? manifest.version : '0.0.0',
-    ...(icon ? { icon: `plugins/${id}/${icon}` } : {}),
+    ...(icon ? { icon } : {}),
     downloads: Number(meta.downloads ?? 0),
     rating,
     ratingCount,
@@ -77,6 +103,18 @@ for (const id of ids) {
       meta.submittedAt,
       statSync(join(dir, 'plugin.json')).mtime.toISOString().slice(0, 10),
     ),
+    ...(typeof page.tagline === 'string' && page.tagline ? { tagline: page.tagline } : {}),
+    ...(typeof page.description === 'string' && page.description
+      ? { longDescription: page.description }
+      : {}),
+    ...(typeof page.accentColor === 'string' && page.accentColor
+      ? { accentColor: page.accentColor }
+      : {}),
+    ...(typeof links.homepage === 'string' && links.homepage ? { homepage: links.homepage } : {}),
+    ...(typeof links.repository === 'string' && links.repository
+      ? { repository: links.repository }
+      : {}),
+    ...(screenshots && screenshots.length ? { screenshots } : {}),
   });
 }
 

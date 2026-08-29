@@ -1,0 +1,16 @@
+{
+  "id": "minecraft",
+  "name": "Minecraft Server",
+  "version": "1.0.0",
+  "author": "You",
+  "description": "Start, stop, and monitor a local Minecraft server, browse its folder structure and view console output.",
+  "icon": "icon.svg",
+
+  "tabs": [
+    {
+      "id": "main",
+      "label": "Minecraft",
+      "entry": "index.html"
+    }
+  ]
+}

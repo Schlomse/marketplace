@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Minecraft Server</title>
+  <link rel="stylesheet" href="style.css" />
+  <!-- Bridge einbinden — liefert window.rc.* -->
+  <script src="/__rc/bridge.js"></script>
+</head>
+<body>
+  <div class="wrap">
+
+    <header class="header">
+      <div class="title">
+        <span class="dot" id="statusDot"></span>
+        <h1>Minecraft Server</h1>
+      </div>
+      <div class="header-right">
+        <span class="sub">Local server control</span>
+        <button id="reopenSetup" class="btn ghost small">⚙ Setup</button>
+      </div>
+    </header>
+
+    <!-- ============ CONFIG ============ -->
+    <section class="card">
+      <h2>Server Configuration</h2>
+
+      <label class="field">
+        <span>Server folder</span>
+        <div class="row">
+          <input id="serverPath" type="text" placeholder="C:\Servers\my-smp" />
+        </div>
+      </label>
+
+      <label class="field">
+        <span>Jar file name</span>
+        <input id="jarName" type="text" placeholder="server.jar" value="server.jar" />
+      </label>
+
+      <div class="field-grid">
+        <label class="field">
+          <span>Min RAM (GB)</span>
+          <input id="ramMin" type="number" min="1" value="2" />
+        </label>
+        <label class="field">
+          <span>Max RAM (GB)</span>
+          <input id="ramMax" type="number" min="1" value="4" />
+        </label>
+      </div>
+
+      <button id="saveConfig" class="btn ghost">Save configuration</button>
+    </section>
+
+    <!-- ============ ACTIONS ============ -->
+    <section class="card">
+      <h2>Actions</h2>
+      <div class="actions">
+        <button id="startBtn" class="btn primary">▶ Start server</button>
+        <button id="consoleBtn" class="btn">🖥 Open console</button>
+        <button id="folderBtn" class="btn">📁 Folder structure</button>
+        <button id="stopBtn" class="btn danger">⏻ Force stop</button>
+      </div>
+      <p class="hint">
+        <strong>Graceful stop:</strong> switch to the console terminal that
+        opened when you hit “Start server” and type <code>stop</code> — this
+        lets the server save the world properly.<br />
+        <strong>Force stop</strong> kills the Java process directly (matched
+        by jar file name) and should only be used if the server is stuck,
+        since it skips the normal save routine.
+      </p>
+    </section>
+
+    <!-- ============ ACTIVITY LOG ============ -->
+    <section class="card">
+      <h2>Activity log</h2>
+      <div id="log" class="log"></div>
+      <p class="hint small">
+        This log only shows actions triggered from this tab. The actual
+        server output (chat, join/leave, errors) appears in the terminal
+        window itself — RelateCore's plugin bridge doesn't stream terminal
+        output back into tabs, so the terminal is the real console.
+      </p>
+    </section>
+
+  </div>
+
+  <!-- ============ FIRST-RUN SETUP MODAL ============ -->
+  <div id="setupOverlay" class="overlay hidden">
+    <div class="modal">
+      <h2>Set up your Minecraft server</h2>
+      <p class="hint">Pick a distribution and version — this downloads the
+        server jar straight into a new folder for you.</p>
+
+      <label class="field">
+        <span>Distribution</span>
+        <select id="setupType">
+          <option value="paper">PaperMC (recommended, plugin support)</option>
+          <option value="vanilla">Vanilla (official Mojang)</option>
+        </select>
+      </label>
+
+      <label class="field">
+        <span>Version</span>
+        <select id="setupVersion">
+          <option value="">Loading versions…</option>
+        </select>
+      </label>
+
+      <label class="field">
+        <span>Install location</span>
+        <select id="setupBaseFolder"></select>
+      </label>
+
+      <label class="field" id="setupServerNameField">
+        <span>Server folder name</span>
+        <input id="setupServerName" type="text" placeholder="my-smp" />
+      </label>
+
+      <label class="field hidden" id="setupCustomPathField">
+        <span>Custom full path</span>
+        <input id="setupCustomPath" type="text" placeholder="D:\Games\Minecraft\my-smp" />
+      </label>
+
+      <div class="hint small" id="setupPathPreview"></div>
+
+      <label class="checkbox">
+        <input type="checkbox" id="setupEula" />
+        <span>I accept the <a href="https://www.minecraft.net/en-us/eula" target="_blank" rel="noopener">Minecraft EULA</a></span>
+      </label>
+
+      <div id="setupStatus" class="hint small"></div>
+
+      <div class="modal-actions">
+        <button id="setupSkip" class="btn ghost">Skip / configure manually</button>
+        <button id="setupDownload" class="btn primary">⬇ Download &amp; install</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

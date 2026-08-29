@@ -1,0 +1,24 @@
+{
+  "id": "minecraft",
+  "name": "Minecraft Server",
+  "version": "1.0.0",
+  "clerkUserId": "user_3IVovfx8q1UFxPDy6V5AmShDlBi",
+  "author": "schlomse",
+  "submittedAt": "2026-08-29T07:16:03.905Z",
+  "changelog": null,
+  "tags": [
+    "tabs",
+    "productivity"
+  ],
+  "status": "pending-review",
+  "page": {
+    "name": "Minecraft Server",
+    "description": "göädefsrkglgöädefsrkglgöädefsrkglgöädefsrkglgöädefsrkglgöädefsrkglgöädefsrkglgöädefsrkglgöädefsrkglgöädefsrkglgöädefsrkglgöädefsrkglgöädefsrkglgöädefsrkglgöädefsrkglgöädefsrkglgöädefsrkglgöädefsrkglgöädefsrkglgöädefsrkglgöädefsrkglgöädefsrkglgöädefsrkglgöädefsrkglgöädefsrkglgöädefsrkglgöädefsrkglgöädefsrkglgöädefsrkglgöädefsrkgl",
+    "accentColor": "#00ff1e",
+    "icon": "page/icon.png",
+    "screenshots": [
+      "plugins/minecraft/page/screenshots/1.png",
+      "plugins/minecraft/page/screenshots/2.png"
+    ]
+  }
+}
